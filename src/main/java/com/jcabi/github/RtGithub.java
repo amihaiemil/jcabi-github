@@ -34,8 +34,8 @@ import com.jcabi.aspects.Loggable;
 import com.jcabi.http.Request;
 import com.jcabi.http.request.ApacheRequest;
 import com.jcabi.http.response.JsonResponse;
-import com.jcabi.manifests.Manifests;
 import java.io.IOException;
+import java.util.Date;
 import javax.json.JsonObject;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.HttpHeaders;
@@ -78,21 +78,10 @@ import org.apache.commons.io.Charsets;
 public final class RtGithub implements Github {
 
     /**
-     * Version of us.
-     */
-    private static final String USER_AGENT = String.format(
-        "jcabi-github %s %s %s",
-        Manifests.read("JCabi-Version"),
-        Manifests.read("JCabi-Build"),
-        Manifests.read("JCabi-Date")
-    );
-
-    /**
      * Default request to start with.
      */
     private static final Request REQUEST =
         new ApacheRequest("https://api.github.com")
-            .header(HttpHeaders.USER_AGENT, RtGithub.USER_AGENT)
             .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON)
             .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON);
 
@@ -100,6 +89,25 @@ public final class RtGithub implements Github {
      * REST request.
      */
     private final transient Request request;
+
+    static {
+        String user_agent = "jcabi-github %s %s %s";
+        try {
+            final JcabiProperties jcabi = JcabiProperties.getInstance();
+            user_agent = String.format(
+                user_agent,
+                jcabi.getProperty("JCabi-Version"),
+                jcabi.getProperty("JCabi-Revision"),
+                jcabi.getProperty("JCabi-Date")
+            );
+        } catch (final IOException ex) {
+            user_agent = String.format(
+                user_agent,
+                "version_unknown", "revision_unknown", (new Date()).toString()
+            );
+        }
+        REQUEST.header(HttpHeaders.USER_AGENT, user_agent);
+    }
 
     /**
      * Public ctor, for anonymous access to Github.
