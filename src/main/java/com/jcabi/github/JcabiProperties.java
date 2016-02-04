@@ -47,19 +47,18 @@ public final class JcabiProperties {
     /**
      * Properties loaded from jcabigithub.properties file.
      */
-    private Properties properties;
+    private static final Properties PROPS = new Properties();
 
     /**
      * Private constructor for singleton.
      * @throws IOException If something goes wrong when loading the file.
      */
     private JcabiProperties() throws IOException {
-        this.properties = new Properties();
-        final InputStream input = JcabiProperties.class.getClassLoader()
-                                      .getResourceAsStream(
-                                          "jcabigithub.properties"
-                                       );
-        this.properties.load(input);
+        final InputStream input = Thread.currentThread()
+                                  .getContextClassLoader().getResourceAsStream(
+                                      "jcabigithub.properties"
+                                  );
+        PROPS.load(input);
         input.close();
     }
 
@@ -68,7 +67,9 @@ public final class JcabiProperties {
      * @return Instance of JcabiProperties
      * @throws IOException If something goes wrong.
      */
-    public static JcabiProperties getInstance() throws IOException {
+    public static synchronized JcabiProperties getInstance()
+        throws IOException
+    {
         if (instance == null) {
             instance = new JcabiProperties();
         }
@@ -81,7 +82,7 @@ public final class JcabiProperties {
      * @return The value of the property or null if it doesn't exist.
      */
     public String getProperty(final String name) {
-        return this.properties.getProperty(name);
+        return PROPS.getProperty(name);
     }
 
 }

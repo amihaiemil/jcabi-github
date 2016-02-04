@@ -40,9 +40,10 @@ import javax.json.JsonObject;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
-import javax.xml.bind.DatatypeConverter;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
+
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.Charsets;
 
 /**
@@ -91,22 +92,22 @@ public final class RtGithub implements Github {
     private final transient Request request;
 
     static {
-        String user_agent = "jcabi-github %s %s %s";
+        String userAgent = "jcabi-github %s %s %s";
         try {
             final JcabiProperties jcabi = JcabiProperties.getInstance();
-            user_agent = String.format(
-                user_agent,
+            userAgent = String.format(
+                userAgent,
                 jcabi.getProperty("JCabi-Version"),
                 jcabi.getProperty("JCabi-Revision"),
                 jcabi.getProperty("JCabi-Date")
             );
         } catch (final IOException ex) {
-            user_agent = String.format(
-                user_agent,
-                "version_unknown", "revision_unknown", (new Date()).toString()
+            userAgent = String.format(
+                userAgent,
+                "version_unknown", "revision_unknown", new Date().toString()
             );
         }
-        REQUEST.header(HttpHeaders.USER_AGENT, user_agent);
+        REQUEST.header(HttpHeaders.USER_AGENT, userAgent);
     }
 
     /**
@@ -131,10 +132,8 @@ public final class RtGithub implements Github {
                 HttpHeaders.AUTHORIZATION,
                 String.format(
                     "Basic %s",
-                    DatatypeConverter.printBase64Binary(
-                        String.format("%s:%s", user, pwd)
-                            .getBytes(Charsets.UTF_8)
-                    )
+                    Base64.encodeBase64(String.format("%s:%s", user, pwd)
+                        .getBytes(Charsets.UTF_8))
                 )
             )
         );
