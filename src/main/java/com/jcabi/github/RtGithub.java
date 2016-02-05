@@ -42,7 +42,6 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.Charsets;
 
@@ -94,7 +93,7 @@ public final class RtGithub implements Github {
     static {
         String userAgent = "jcabi-github %s %s %s";
         try {
-            final JcabiProperties jcabi = JcabiProperties.getInstance();
+            final JcabiProperties jcabi = new JcabiProperties();
             userAgent = String.format(
                 userAgent,
                 jcabi.getProperty("JCabi-Version"),
@@ -133,7 +132,8 @@ public final class RtGithub implements Github {
                 String.format(
                     "Basic %s",
                     Base64.encodeBase64(String.format("%s:%s", user, pwd)
-                        .getBytes(Charsets.UTF_8))
+                        .getBytes(Charsets.UTF_8)
+                    )
                 )
             )
         );

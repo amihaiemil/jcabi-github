@@ -42,6 +42,10 @@
     <packaging>jar</packaging>
     <name>jcabi-github</name>
     <description>Object Oriented Github API</description>
+    <properties>
+        <buildtimestamp>${maven.build.timestamp}</buildtimestamp>
+        <maven.build.timestamp.format>dd MMM yyyy</maven.build.timestamp.format>
+    </properties>
     <issueManagement>
         <system>github</system>
         <url>https://github.com/jcabi/jcabi-github/issues</url>
@@ -83,10 +87,6 @@
             <groupId>com.jcabi.incubator</groupId>
             <artifactId>xembly</artifactId>
             <version>0.22</version>
-        </dependency>
-        <dependency>
-            <groupId>com.jcabi</groupId>
-            <artifactId>jcabi-manifests</artifactId>
         </dependency>
         <dependency>
             <groupId>com.jcabi</groupId>

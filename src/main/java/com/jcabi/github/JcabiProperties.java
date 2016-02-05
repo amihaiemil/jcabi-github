@@ -34,46 +34,28 @@ import java.io.InputStream;
 import java.util.Properties;
 
 /**
- * Singleton class that loads the jcabigithub.properties file.
+ * Class that loads the jcabigithub.properties file.
  * @author Mihai Andronache (amihaiemil@gmail.com)
  * @version $Id$
  */
 public final class JcabiProperties {
 
     /**
-     * Instance of JcabiProperties.
-     */
-    private static JcabiProperties instance;
-    /**
      * Properties loaded from jcabigithub.properties file.
      */
     private static final Properties PROPS = new Properties();
 
     /**
-     * Private constructor for singleton.
+     * Constructor.
      * @throws IOException If something goes wrong when loading the file.
      */
-    private JcabiProperties() throws IOException {
+    JcabiProperties() throws IOException {
         final InputStream input = Thread.currentThread()
                                   .getContextClassLoader().getResourceAsStream(
                                       "jcabigithub.properties"
                                   );
         PROPS.load(input);
         input.close();
-    }
-
-    /**
-     * Get the singleton instance of JcabiProperties.
-     * @return Instance of JcabiProperties
-     * @throws IOException If something goes wrong.
-     */
-    public static synchronized JcabiProperties getInstance()
-        throws IOException
-    {
-        if (instance == null) {
-            instance = new JcabiProperties();
-        }
-        return instance;
     }
 
     /**

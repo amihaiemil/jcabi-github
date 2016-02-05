@@ -46,7 +46,7 @@ public final class JcabiPropertiesITCase {
     @Test
     public void loadsPropertiesFile() throws Exception {
         MatcherAssert.assertThat(
-            JcabiProperties.getInstance().getProperty("JCabi-Version"),
+            new JcabiProperties().getProperty("JCabi-Version"),
             Matchers.notNullValue()
         );
     }
